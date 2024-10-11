@@ -17,11 +17,13 @@ namespace Tennis
         public string GetScore()
         {
             string score;
-            bool isBeforeDeuceOrWin = (player1Score < 4 && player2Score < 4) && (player1Score + player2Score < 6);
+            var isBeforeDeuceOrWin = IsBeforeDeuce() && IsBeforeWin();
+
             if (isBeforeDeuceOrWin)
             {
                 score = points[player1Score];
-                return (player1Score == player2Score) ? score + "-All" : score + "-" + points[player2Score];
+                // TODO gérer la map,score 
+                return player1Score == player2Score ? DisplayEquality(score) : DisplayScore(score, points[player2Score]);
             }
 
             if (player1Score == player2Score)
@@ -29,6 +31,14 @@ namespace Tennis
             score = player1Score > player2Score ? player1Name : player2Name;
             return ((player1Score - player2Score) * (player1Score - player2Score) == 1) ? "Advantage " + score : "Win for " + score;
         }
+
+        private string DisplayScore(string score, string pointPlayer2) => score + "-" + pointPlayer2;
+
+        private static string DisplayEquality(string score) => score + "-All";
+
+        private bool IsBeforeWin() => player1Score + player2Score < 6;
+
+        private bool IsBeforeDeuce() => player1Score < 4 && player2Score < 4;
 
         public void WonPoint(string playerName)
         {
